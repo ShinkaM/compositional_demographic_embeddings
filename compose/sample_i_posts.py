@@ -6,17 +6,26 @@ from termcolor import colored
 from collections import defaultdict
 import os
 import regex as re
+from argparse import ArgumentParser
 
-DATA_DIR = '../data/2009/'
-CUTOFF = 1000
-FILE_TO_USE = 'RC_2009-01'
+
+
 
 def main():
-    get_sample()
+    parser = ArgumentParser()
+    parser.add_argument('-d', '--dir', help='Dirctory where data is located', type=str)
+    parser.add_argument('-f', '--file', help='File to sample i am post', type=str)
+    parser.add_argument('-c', '--cutoff', help='max number of i am files to sample', default = 1000, type=int)
+    opt = parser.parse_args()
+    print(os.getcwd())
+    DATA_DIR = opt.dir
+    CUTOFF = opt.cutoff
+    FILE_TO_USE = opt.file
+    get_sample(DATA_DIR, FILE_TO_USE, CUTOFF)
     annotate_sample()
 
 def annotate_sample():
-    out = open('../samples/sample_i_am_a_annotated_sample', 'w')
+    out = open('../samples/i_sample', 'w')
     tallies = defaultdict(lambda: 0)
     i = 0
     try:
@@ -33,7 +42,7 @@ def annotate_sample():
         for k,v in tallies.items():
             print(k + ': ' + str(v))
 
-def get_sample():
+def get_sample(DATA_DIR, FILE_TO_USE, CUTOFF):
     i_am = []
     i_am_a = []
     as_a = []
@@ -42,7 +51,7 @@ def get_sample():
     i_am_pattern = re.compile('((I am|I\'m))',re.IGNORECASE )
     i_am_a_pattern = re.compile('((I am|I\'m) *(also)* *(a|an))',re.IGNORECASE )
     # print(os.listdir())
-    with open(DATA_DIR + FILE_TO_USE) as handle:
+    with open(DATA_DIR + '/' + FILE_TO_USE) as handle:
         lines = handle.readlines()
         # print(lines)
         for line in tqdm(lines):

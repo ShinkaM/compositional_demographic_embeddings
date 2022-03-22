@@ -55,6 +55,7 @@ def get_sample(DATA_DIR, FILE_TO_USE, CUTOFF):
         lines = handle.readlines()
         # print(lines)
         for line in tqdm(lines):
+            print(line)
             tline = json.loads(line)
             body = tline['body'].replace('\n', ' ').replace('\r', '').lower()
 

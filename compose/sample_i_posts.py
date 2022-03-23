@@ -43,13 +43,16 @@ def annotate_sample():
             print(k + ': ' + str(v))
 
 def get_sample(DATA_DIR, FILE_TO_USE, CUTOFF):
-    i_am = []
+    # i_am = []
     i_am_a = []
     as_a = []
+    mf = []
 
-    i_am_pattern = re.compile('^((I am|I\'m))[\w\s]+[?.!]$',re.IGNORECASE )
+    # i_am_pattern = re.compile('^((I am|I\'m))[\w\s]+[?.!]$',re.IGNORECASE )
     i_am_a_pattern = re.compile('^((I am|I\'m) *(also)* *(a|an))[\w\s]+[?.!]$',re.IGNORECASE )
     as_a_pattern = re.compile('^as (a|an) [\w\s]+[?.!]$', re.IGNORECASE)
+    mf_pattern = re.compile('^[\w\s]+[\[|\(]([0-9][0-9](f|F|m|M)|(f|F|m|M)[0-9][0-9])[\]|\)][\w\s]+[?.!]$', re.IGNORECASE)
+
     # print(os.listdir())
     with open(DATA_DIR + '/' + FILE_TO_USE) as handle:
         lines = handle.readlines()
@@ -59,20 +62,25 @@ def get_sample(DATA_DIR, FILE_TO_USE, CUTOFF):
             tline = json.loads(line)
             body = tline['body'].replace('\n', ' ').replace('\r', '').lower()
 
-            if bool(re.search(i_am_pattern, body)):
-                i_am.append(body)
+            # if bool(re.search(i_am_pattern, body)):
+            #     i_am.append(body)
 
             if bool(re.search(i_am_a_pattern, body)):
                 i_am_a.append(body)
             if bool(re.search(as_a_pattern, body)):
                 as_a.append(body)
+            if bool(re.search(mf_pattern, body)):
+                mf.append(body)
 
-    random.shuffle(i_am)
+    random.shuffle(mf)
     random.shuffle(i_am_a)
     random.shuffle(as_a)
 
-    with open('../samples/sample_i_am', 'w') as handle:
-        for line in i_am[:CUTOFF]:
+    # with open('../samples/sample_i_am', 'w') as handle:
+    #     for line in i_am[:CUTOFF]:
+    #         handle.write(line + '\n')
+    with open('../samples/sample_mf', 'w') as handle:
+        for line in mf[:CUTOFF]:
             handle.write(line + '\n')
 
     with open('../samples/sample_i_am_a', 'w') as handle:

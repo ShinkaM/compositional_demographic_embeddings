@@ -29,7 +29,7 @@ def annotate_sample():
     tallies = defaultdict(lambda: 0)
     i = 0
     try:
-        with open('../samples/sample_i_am_a_sample') as handle:
+        with open('../samples/sample_i_am_a') as handle:
             for line in handle.readlines():
                 tline = line.strip().replace('\r', '')
                 print(tline.replace('i am a', colored('i am a', 'red')).replace('i\'m a', colored('i\'m a', 'red')))
@@ -47,9 +47,9 @@ def get_sample(DATA_DIR, FILE_TO_USE, CUTOFF):
     i_am_a = []
     as_a = []
 
-    as_a_pattern = re.compile('as (a|an)', re.IGNORECASE)
-    i_am_pattern = re.compile('((I am|I\'m))',re.IGNORECASE )
-    i_am_a_pattern = re.compile('((I am|I\'m) *(also)* *(a|an))',re.IGNORECASE )
+    i_am_pattern = re.compile('^((I am|I\'m))[\w\s]+[?.!]$',re.IGNORECASE )
+    i_am_a_pattern = re.compile('^((I am|I\'m) *(also)* *(a|an))[\w\s]+[?.!]$',re.IGNORECASE )
+    as_a_pattern = re.compile('^as (a|an) [\w\s]+[?.!]$', re.IGNORECASE)
     # print(os.listdir())
     with open(DATA_DIR + '/' + FILE_TO_USE) as handle:
         lines = handle.readlines()

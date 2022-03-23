@@ -435,7 +435,7 @@ def read_all_gender(DIR_LOC):
     
     for cur_dir in DIR_SET:
         print('\n\nReading ' + cur_dir + '...')
-        file_list = [i for i in os.listdir(DIR_LOC + cur_dir) if re.match('RC_\d\d\d\d-\d\d$', i)]
+        file_list = [i for i in os.listdir(DIR_LOC) if re.match('RC_\d\d\d\d-\d\d$', i)]
         for file in file_list:
             with open(DIR_LOC + cur_dir + '/' + file) as handle:
                 for line in tqdm(handle.readlines()):

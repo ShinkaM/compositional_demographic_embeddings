@@ -16,15 +16,19 @@ from argparse import ArgumentParser
 import regex as re
 sys.path.append('..')
 from utils import DIR_SET
+from argparse import ArgumentParser
 
-DIR_LOC = '../data/'
+# DIR_LOC = '../data/'
 
 def main():
     parser = ArgumentParser()
     parser.add_argument('-t', '--type', dest='type', help='Can be gender, location, religion, degree, or age.', default='gender', type=str)
     parser.add_argument('-i', '--intersect', dest='intersect', help='Find users in set intersection.', default=False, action='store_true')
     parser.add_argument('-p', '--plot', dest='plot', help='Plot the subset.', default=False, action='store_true')
+    parser.add_argument('-d', '--directory', help = 'Locatio of data to process', default = '../data', type = str )
     opt = parser.parse_args()
+
+    DIR_LOC = opt.directory
 
     if opt.intersect:
         find_intersection()
@@ -38,15 +42,15 @@ def main():
 
         print('Finding ' + opt.type + ' statements...')
         if opt.type == 'gender':
-            read_all_gender()
+            read_all_gender(DIR_LOC)
         elif opt.type == 'location':
-            read_all_location()
+            read_all_location(DIR_LOC)
         elif opt.type == 'age':
-            read_all_age()
+            read_all_age(DIR_LOC)
         elif opt.type == 'religion':
-            read_all_religion()
+            read_all_religion(DIR_LOC)
         elif opt.type == 'degree':
-            read_all_degree()
+            read_all_degree(DIR_LOC)
 
 def plot_intersection():
     users = defaultdict(lambda: {})
@@ -258,7 +262,7 @@ def find_intersection():
             handle.write(i + '\t' + str(pdict[i]) + '\t' + loc_val + '\t' + users[i]['gender'] + '\t' + rel_val + '\t' + users[i]['age'] + '\n')
 
 # christian, muslim, secular, atheist, agnostic, hindu, buddhist
-def read_all_religion():
+def read_all_religion(DIR_LOC):
     for cur_dir in DIR_SET:
         with open('../demographic/religions_' + cur_dir, 'w') as outh:
             print('\n\nReading ' + cur_dir + '...')
@@ -277,7 +281,7 @@ def read_all_religion():
                         if match_o:
                             outh.write(author + '\t' + subr + '\t' + match_o.groups()[2] + '\n')
 
-def read_all_location():
+def read_all_location(DIR_LOC):
     MANUAL_LOCATION = ['canada']
 
     print('Loading Stanford CoreNLP...')
@@ -338,7 +342,7 @@ def read_all_location():
                                         # print(author + '\t' + subr + '\t' + ' '.join(loc))
                                         outh.write(author + '\t' + subr + '\t' + loc_type + '\t' + ' '.join(loc) + '\n')
 
-def read_all_degree():
+def read_all_degree(DIR_LOC):
     print('Loading Stanford CoreNLP...')
     with CoreNLPClient(annotators=['tokenize','ssplit','pos','lemma','ner'], timeout=60000, memory='16G') as client:
 
@@ -399,7 +403,7 @@ def read_all_degree():
                                         # print(author + '\t' + subr + '\t' + ' '.join(deg))
                                         outh.write(author + '\t' + subr + '\t' + deg_type + '\t' + ' '.join(deg) + '\n')
 
-def read_all_age():
+def read_all_age(DIR_LOC):
     for cur_dir in DIR_SET:
         with open('../demographic/ages_' + cur_dir, 'w') as outh:
             print('\n\nReading ' + cur_dir + '...')
@@ -418,7 +422,7 @@ def read_all_age():
                         if match_o:
                             outh.write(author + '\t' + subr + '\t' + match_o.groups()[1] + '\n')
 
-def read_all_gender():
+def read_all_gender(DIR_LOC):
     males = []
     females = []
     male_self_stmt = []

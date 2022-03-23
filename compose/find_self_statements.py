@@ -427,11 +427,12 @@ def read_all_gender(DIR_LOC):
     females = []
     male_self_stmt = []
     female_self_stmt = []
-    female_pattern = re.compile('(^((I am|I\'m) (a|an))[\w\s]* (woman|gal|female|girl|mom|sister)[\w\s]*[?.!]$)|^((as) (a|an))[\w\s]* (woman|gal|female|girl|mom|sister)[\w\s]*[?.!]$|^[\w\s]+[\[|\(]([0-9][0-9](f|F)|(f|F)[0-9][0-9])[\]|\)][\w\s]+[?.!]$', re.IGNORECASE)
+    female_pattern = re.compile('^((^((i am|i\'m) (also )*(a|an)) (\w*\s)?(woman|gal|female|girl|mom|mother|sister|sis)[\w\s]*[?.!]$))|^((as) (a|an)) (\w*\s)?(woman|gal|female|girl|mom|mother|sister|sis)[\w\s]*[?.!]$|^[\w\s]+[\[|\(]([0-9][0-9](f|F)|(f|F)[0-9][0-9])[\]|\)][\w\s]+[?.!]$', re.IGNORECASE)
     # male_pattern_iam = re.compile('^((I am|I\'m) (a|an))[\w\s]* (man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$', re.IGNORECASE)
     # female_pattern_asa = re.compile('^((as) (a|an))[\w\s]* (woman|gal|female|girl|mom|sister)[\w\s]*[?.!]$', re.IGNORECASE)
     # male_pattern_asa = re.compile('^((as) (a|an))[\w\s]* (woman|gal|female|girl|mom|sister)[\w\s]*[?.!]$', re.IGNORECASE)
-    male_pattern = re.compile('(^((I am|I\'m) (a|an))[\w\s]* (man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$)|^((as) (a|an))[\w\s]* (man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$|^[\w\s]+[\[|\(]([0-9][0-9](m|M)|(m|M)[0-9][0-9])[\]|\)][\w\s]+[?.!]$', re.IGNORECASE)
+    # male_pattern = re.compile('(^((I am|I\'m) (a|an))[\w\s]* (man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$)|^((as) (a|an))[\w\s]* (man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$|^[\w\s]+[\[|\(]([0-9][0-9](m|M)|(m|M)[0-9][0-9])[\]|\)][\w\s]+[?.!]$', re.IGNORECASE)
+    male_pattern = re.compile('^((^((i am|i\'m) (also )*(a|an)) (\w*\s)?(man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$))|^((as) (a|an)) (\w*\s)?(man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$|^[\w\s]+[\[|\(]([0-9][0-9](m|M)|(m|M)[0-9][0-9])[\]|\)][\w\s]+[?.!]$', re.IGNORECASE)
     
     # for cur_dir in DIR_SET:
     # print('\n\nReading ' + cur_dir + '...')

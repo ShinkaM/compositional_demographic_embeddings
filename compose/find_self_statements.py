@@ -433,29 +433,29 @@ def read_all_gender(DIR_LOC):
     # male_pattern_asa = re.compile('^((as) (a|an))[\w\s]* (woman|gal|female|girl|mom|sister)[\w\s]*[?.!]$', re.IGNORECASE)
     male_pattern = re.compile('(^((I am|I\'m) (a|an))[\w\s]* (man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$)|^((as) (a|an))[\w\s]* (man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$|^[\w\s]+[\[|\(]([0-9][0-9](m|M)|(m|M)[0-9][0-9])[\]|\)][\w\s]+[?.!]$', re.IGNORECASE)
     
-    for cur_dir in DIR_SET:
-        print('\n\nReading ' + cur_dir + '...')
-        file_list = [i for i in os.listdir(DIR_LOC) if re.match('RC_\d\d\d\d-\d\d$', i)]
-        for file in file_list:
-            with open(DIR_LOC + '/' + file) as handle:
-                for line in tqdm(handle.readlines()):
-                    tline = json.loads(line)
-                    body = tline['body'].lower().replace('\n', ' ')
-                    subr = tline['subreddit'].lower()
-                    if 'fiction' in subr:
-                        continue
-                    if bool(re.search(male_pattern, body)):
-                        male_self_stmt.append(re.search(male_pattern, body).group(0))
-                        males.append(tline['author'])
-                    # if bool(re.search(male_pattern_iam, body)):
-                    #     male_self_stmt.append(re.search(male_pattern_iam, body).group(0))
-                    #     males.append(tline['author'])
-                    # if bool(re.search(female_pattern_asa, body)):
-                    #     female_self_stmt.append(re.search(female_pattern_asa, body).group(0))
-                    #     females.append(tline['author'])
-                    if bool(re.search(female_pattern, body)):
-                        female_self_stmt.append(re.search(female_pattern, body).group(0))
-                        females.append(tline['author'])
+    # for cur_dir in DIR_SET:
+    # print('\n\nReading ' + cur_dir + '...')
+    file_list = [i for i in os.listdir(DIR_LOC) if re.match('RC_\d\d\d\d-\d\d$', i)]
+    for file in file_list:
+        with open(DIR_LOC + '/' + file) as handle:
+            for line in tqdm(handle.readlines()):
+                tline = json.loads(line)
+                body = tline['body'].lower().replace('\n', ' ')
+                subr = tline['subreddit'].lower()
+                if 'fiction' in subr:
+                    continue
+                if bool(re.search(male_pattern, body)):
+                    male_self_stmt.append(re.search(male_pattern, body).group(0))
+                    males.append(tline['author'])
+                # if bool(re.search(male_pattern_iam, body)):
+                #     male_self_stmt.append(re.search(male_pattern_iam, body).group(0))
+                #     males.append(tline['author'])
+                # if bool(re.search(female_pattern_asa, body)):
+                #     female_self_stmt.append(re.search(female_pattern_asa, body).group(0))
+                #     females.append(tline['author'])
+                if bool(re.search(female_pattern, body)):
+                    female_self_stmt.append(re.search(female_pattern, body).group(0))
+                    females.append(tline['author'])
         print('Males: ' + str(len(males)))
         print('Females: ' + str(len(females)))
         print('Unique Males: ' + str(len(set(males))))

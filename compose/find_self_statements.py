@@ -13,7 +13,7 @@ from pprint import pprint
 from collections import defaultdict
 from stanfordnlp.server import CoreNLPClient
 from argparse import ArgumentParser
-
+import regex as re
 sys.path.append('..')
 from utils import DIR_SET
 
@@ -421,6 +421,13 @@ def read_all_age():
 def read_all_gender():
     males = []
     females = []
+    male_self_stmt = []
+    female_self_stmt = []
+    female_pattern_iam = re.compile('^((I am|I\'m) (a|an))[\w\s]* (woman|gal|female|girl|mom|sister)[\w\s]*[?.!]$', re.IGNORECASE)
+    male_pattern_iam = re.compile('^((I am|I\'m) (a|an))[\w\s]* (man|dude|guy|male|boy|father|dad|bro|brother)[\w\s]*[?.!]$', re.IGNORECASE)
+    female_pattern_asa = re.compile('^((as) (a|an))[\w\s]* (woman|gal|female|girl|mom|sister)[\w\s]*[?.!]$', re.IGNORECASE)
+    male_pattern_asa = re.compile('^((as) (a|an))[\w\s]* (woman|gal|female|girl|mom|sister)[\w\s]*[?.!]$', re.IGNORECASE)
+
     for cur_dir in DIR_SET:
         print('\n\nReading ' + cur_dir + '...')
         file_list = [i for i in os.listdir(DIR_LOC + cur_dir) if re.match('RC_\d\d\d\d-\d\d$', i)]
@@ -432,29 +439,18 @@ def read_all_gender():
                     subr = tline['subreddit'].lower()
                     if 'fiction' in subr:
                         continue
-                    if 'i\'m a guy' in body or \
-                       'i am a guy' in body or \
-                       'i am a male' in body or \
-                       'i\'m a male' in body or \
-                       'i am a man' in body or \
-                       'i\'m a man' in body or \
-                       'i am a boy' in body or \
-                       'i\'m a boy' in body or \
-                       'i am male' in body or \
-                       'i\'m male' in body:
+                    if bool(re.search(male_pattern_asa, body)):
+                        male_self_stmt.append(re.search(male_pattern_asa, body).group(0))
                         males.append(tline['author'])
-                    if 'i\'m a girl' in body or \
-                       'i am a girl' in body or \
-                       'i\'m a gal' in body or \
-                       'i am a gal' in body or \
-                       'i am a female' in body or \
-                       'i\'m a female' in body or \
-                       'i am a woman' in body or \
-                       'i\'m a woman' in body or \
-                       'i am female' in body or \
-                       'i\'m female' in body:
+                    if bool(re.search(male_pattern_iam, body)):
+                        male_self_stmt.append(re.search(male_pattern_iam, body).group(0))
+                        males.append(tline['author'])
+                    if bool(re.search(female_pattern_asa, body)):
+                        female_self_stmt.append(re.search(female_pattern_asa, body).group(0))
                         females.append(tline['author'])
-
+                    if bool(re.search(female_pattern_iam, body)):
+                        female_self_stmt.append(re.search(female_pattern_iam, body).group(0))
+                        females.append(tline['author'])
         print('Males: ' + str(len(males)))
         print('Females: ' + str(len(females)))
         print('Unique Males: ' + str(len(set(males))))
@@ -472,6 +468,11 @@ def read_all_gender():
             handle.write(f + '\tfemale\n')
         for m in males:
             handle.write(m + '\tmale\n')
+    with open('../demographic/gender_stmt', 'w') as handle:
+        for f in female_self_stmt:
+            handle.write(f + '\n')
+        for m in male_self_stmt:
+            handle.write(m + '\n')
 
 if __name__ == '__main__':
     main()

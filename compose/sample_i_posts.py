@@ -17,7 +17,7 @@ def main():
     parser.add_argument('-f', '--file', help='File to sample i am post', type=str)
     parser.add_argument('-c', '--cutoff', help='max number of i am files to sample', default = 1000, type=int)
     opt = parser.parse_args()
-    print(os.getcwd())
+    # print(os.getcwd())
     DATA_DIR = opt.dir
     CUTOFF = opt.cutoff
     FILE_TO_USE = opt.file
@@ -58,7 +58,7 @@ def get_sample(DATA_DIR, FILE_TO_USE, CUTOFF):
         lines = handle.readlines()
         # print(lines)
         for line in tqdm(lines):
-            print(line)
+            # print(line)
             tline = json.loads(line)
             body = tline['body'].replace('\n', ' ').replace('\r', '').lower()
 
